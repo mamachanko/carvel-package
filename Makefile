@@ -53,3 +53,31 @@ release:
 	  --repo-output build/repository \
 	  --copy-to build \
 	  --yes
+
+.PHONY: cluster-create
+cluster-create:
+	kind create cluster
+
+.PHONY: kapp-controller-install
+kapp-controller-install:
+	kapp deploy \
+	  --app kapp-controller \
+		--yes \
+		--diff-changes \
+		--file https://github.com/vmware-tanzu/carvel-kapp-controller/releases/latest/download/release.yml 
+
+.PHONY: install
+install: kapp-controller-install
+	kapp deploy \
+	  --app nginx-sample \
+	  --yes \
+	  --diff-changes \
+	  --file build/packages \
+	  --file install.yml
+
+.PHONY: uninstall
+uninstall:
+	kapp delete \
+	  --app nginx-sample \
+	  --yes \
+	  --diff-changes
