@@ -1,0 +1,6 @@
+#@data/values-schema
+---
+build:
+  registry_host: index.docker.io
+  registry_project: mamachanko
+
